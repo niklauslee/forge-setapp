@@ -1,6 +1,12 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+import { SETAPP_LOG_LEVEL, SetappManager } from "@setapp/framework-wrapper";
+
+SetappManager.logLevel = SETAPP_LOG_LEVEL.VERBOSE;
+SetappManager.setLogHandle((message, logLevel) => {
+  console.log(`[Setapp][${logLevel}] ${message}`);
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -8,6 +14,8 @@ if (started) {
 }
 
 const createWindow = () => {
+  SetappManager.shared.showReleaseNotesWindowIfNeeded();
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
